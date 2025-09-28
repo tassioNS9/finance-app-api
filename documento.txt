@@ -1,0 +1,8 @@
+npm init -y --> criar package.json
+touch .gitignore --> criar arquivo do gitignore
+Denifir type:module --> para modelo mais atual de importações
+
+
+npm install -D eslint --> instalar eslint como dependência de desenvolvimento
+
+npx eslint --init --> Executar o comando para inicializar o eslint e marcar To check syntax and find problems
