@@ -1,4 +1,4 @@
-import { badRequest, serverError, ok } from '../helpers/http.js'
+import { badRequest, serverError, ok } from './helpers/http.js'
 import { UpdateUserUseCase } from '../use-cases/update-user.js'
 import validator from 'validator'
 import { EmailAlreadyInUseError } from '../errors/user.js'
