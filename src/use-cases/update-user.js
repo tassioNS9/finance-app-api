@@ -4,6 +4,10 @@ import { EmailAlreadyInUseError } from '../errors/user.js'
 import { PostgresUpdateUserRepository } from '../repositories/postgres/update-user.js'
 
 export class UpdateUserUseCase {
+    constructor(postgresUpdateUserRepository) {
+        this.postgresUpdateUserRepository = postgresUpdateUserRepository
+    }
+
     async execute(userId, updateUserParams) {
         const postgresGetUserByEmailRepository =
             new PostgresGetUserByEmailRepository()
