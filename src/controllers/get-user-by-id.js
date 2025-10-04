@@ -1,9 +1,12 @@
 import { ok, serverError, notFound } from './helpers/http.js'
 import { invalidIdResponse } from './helpers/user.js'
-import { GetUserByIdCase } from '../use-cases/get-user-by-id.js'
+
 import validator from 'validator'
 
 export class GetUserByIdController {
+    constructor(getUserByIdUseCase) {
+        this.getUserByIdUseCase = getUserByIdUseCase
+    }
     async execute(httpRequest) {
         try {
             const isIdValid = validator.isUUID(httpRequest.params.userId)
@@ -11,9 +14,8 @@ export class GetUserByIdController {
             if (!isIdValid) {
                 return invalidIdResponse()
             }
-            const getUserByIdUseCase = new GetUserByIdCase()
 
-            const user = await getUserByIdUseCase.execute(
+            const user = await this.getUserByIdUseCase.execute(
                 httpRequest.params.userId
             )
 

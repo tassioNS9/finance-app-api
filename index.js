@@ -3,6 +3,8 @@ import 'dotenv/config.js'
 import { CreateUserController } from './src/controllers/create-user.js'
 import { GetUserByIdController } from './src/controllers/get-user-by-id.js'
 import { UpdateUserController } from './src/controllers/update-user.js'
+import { GetUserByIdUseCase } from './src/use-cases/get-user-by-id.js'
+import { PostgresGetUserByIdRepository } from './src/repositories/postgres/get-user-by-id.js'
 import { DeleteUserController } from './src/controllers/delete-user.js'
 
 const app = express()
@@ -10,7 +12,9 @@ const app = express()
 app.use(express.json())
 
 app.get('/api/users/:userId', async (request, response) => {
-    const getUserByIdController = new GetUserByIdController()
+    const getUserByIdRepository = new PostgresGetUserByIdRepository()
+    const getUserByIdUseCase = new GetUserByIdUseCase(getUserByIdRepository)
+    const getUserByIdController = new GetUserByIdController(getUserByIdUseCase)
 
     const { statusCode, body } = await getUserByIdController.execute(request)
 
