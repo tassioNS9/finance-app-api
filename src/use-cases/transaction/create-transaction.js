@@ -6,20 +6,21 @@ export class CreateTransactionUseCase {
         this.getUserByIdRepository = getUserByIdRepository
     }
     async execute(createTransactionParams) {
-        const userId = createTransactionParams.userId
+        const userId = createTransactionParams.user_id
         const existingUser = await this.getUserByIdRepository.execute(userId)
 
-        if (existingUser) {
+        if (!existingUser) {
             throw new UserNotFoundError(userId)
         }
 
         const transactionId = uuidv4()
 
         // chamar o repositório
-        const createdTransaction = await this.createUserRepository.execute({
-            ...createTransactionParams,
-            id: transactionId,
-        })
+        const createdTransaction =
+            await this.createTransactionRepository.execute({
+                ...createTransactionParams,
+                id: transactionId,
+            })
 
         return createdTransaction
     }
