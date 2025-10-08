@@ -4,10 +4,11 @@ import { EmailAlreadyInUseError } from '../../errors/user.js'
 import {
     invalidPasswordResponse,
     emailIsAlreadyInUseResponse,
-    invalidIdResponse,
     checkIfPasswordIsValid,
     checkIfEmailIsValid,
 } from '../helpers/user.js'
+
+import { invalidIdResponse } from '../helpers/validation.js'
 
 export class UpdateUserController {
     constructor(updateUserUseCase) {

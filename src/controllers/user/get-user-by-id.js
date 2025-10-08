@@ -1,5 +1,5 @@
 import { ok, serverError, notFound } from '../helpers/http.js'
-import { invalidIdResponse } from '../helpers/user.js'
+import { invalidIdResponse } from '../helpers/validation.js'
 
 import validator from 'validator'
 
