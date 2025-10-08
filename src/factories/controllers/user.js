@@ -3,14 +3,14 @@ import { PostgresGetUserByEmailRepository } from '../../repositories/postgres/us
 import { PostgresUpdateUserRepository } from '../../repositories/postgres/user/update-user.js'
 import { PostgresCreateUserRepository } from '../../repositories/postgres/user/create-user.js'
 import { PostgresDeleteUserRepository } from '../../repositories/postgres/user/delete-user.js'
-import { DeleteUserController } from '../../controllers/delete-user.js'
+import { DeleteUserController } from '../../controllers/user/delete-user.js'
+import { CreateUserController } from '../../controllers/user/create-user.js'
+import { UpdateUserController } from '../../controllers/user/update-user.js'
+import { GetUserByIdController } from '../../controllers/user/get-user-by-id.js'
 import { DeleteUserUseCase } from '../../use-cases/user/delete-user.js'
-import { CreateUserController } from '../../controllers/create-user.js'
 import { CreateUserUseCase } from '../../use-cases/user/create-user.js'
 import { GetUserByIdUseCase } from '../../use-cases/user/get-user-by-id.js'
-import { UpdateUserController } from '../../controllers/update-user.js'
 import { UpdateUserUseCase } from '../../use-cases/user/update-user.js'
-import { GetUserByIdController } from '../../controllers/get-user-by-id.js'
 
 export const makeGetUserByIdController = () => {
     const getUserByIdRepository = new PostgresGetUserByIdRepository()
