@@ -1,10 +1,13 @@
 import { badRequest, serverError, created } from '../helpers/http.js'
 import {
+    checkIfAmountIsValid,
+    checkIfTypeIsValid,
+} from '../helpers/transaction.js'
+import {
     checkIfIdIsValid,
     invalidIdResponse,
     validateRequiredFields,
 } from '../helpers/validation.js'
-import validator from 'validator'
 export class CreateTransactionController {
     constructor(createTransactionUseCase) {
         this.createTransactionUseCase = createTransactionUseCase
@@ -29,20 +32,7 @@ export class CreateTransactionController {
                 return invalidIdResponse()
             }
 
-            if (params.amount <= 0) {
-                return badRequest({
-                    message: 'The amount must be greater than zero',
-                })
-            }
-
-            const amountIsValid = validator.isCurrency(
-                params.amount.toString(),
-                {
-                    allow_negatives: false,
-                    digits_after_decimal: [2],
-                    decimal_separator: '.',
-                }
-            )
+            const amountIsValid = checkIfAmountIsValid(params.amount)
 
             if (!amountIsValid) {
                 return badRequest({
@@ -52,9 +42,7 @@ export class CreateTransactionController {
 
             const type = params.type.trim().toUpperCase()
 
-            const typeIsValid = ['EARNING', 'EXPENSE', 'INVESTIMENT'].includes(
-                type
-            )
+            const typeIsValid = checkIfTypeIsValid(type) // EARNING, EXPENSE, INVESTIMENT
 
             if (!typeIsValid) {
                 return badRequest({
