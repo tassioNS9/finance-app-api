@@ -1,8 +1,9 @@
+import { checkIfIdIsValid, invalidIdResponse } from '../helpers/validation.js'
+
 import {
-    checkIfIdIsValid,
-    invalidIdResponse,
     checkIfTypeIsValid,
-} from '../helpers/validation.js'
+    checkIfAmountIsValid,
+} from '../helpers/transaction.js'
 import { serverError, badRequest, ok } from '../helpers/http.js'
 
 export class UpdateTransactionController {
@@ -11,9 +12,7 @@ export class UpdateTransactionController {
     }
     async execute(httpRequest) {
         try {
-            const idIsValid = checkIfIdIsValid(
-                httpRequest.params.transactionsId
-            )
+            const idIsValid = checkIfIdIsValid(httpRequest.params.transactionId)
             if (!idIsValid) {
                 return invalidIdResponse()
             }
@@ -33,7 +32,7 @@ export class UpdateTransactionController {
             }
 
             if (params.amount) {
-                const amountIsValid = checkIfIdIsValid(params.amount)
+                const amountIsValid = checkIfAmountIsValid(params.amount)
 
                 if (!amountIsValid) {
                     return badRequest({
@@ -41,19 +40,16 @@ export class UpdateTransactionController {
                     })
                 }
             }
+            if (params.type) {
+                const typeIsValid = checkIfTypeIsValid(params.type)
 
-            const type = params.type.trim().toUpperCase()
-
-            const typeIsValid = checkIfTypeIsValid(type) // EARNING, EXPENSE, INVESTIMENT
-
-            if (!typeIsValid) {
-                return badRequest({
-                    message: 'The type must be EARNING, EXPENSE or INVESTIMENT',
-                })
+                if (!typeIsValid) {
+                    return badRequest({ message: 'Type is not valid!' })
+                }
             }
 
             const transaction = await this.updateTransactionUseCase.execute(
-                httpRequest.params.transactionsId,
+                httpRequest.params.transactionId,
                 params
             )
 
