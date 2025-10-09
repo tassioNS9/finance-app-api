@@ -1,4 +1,4 @@
-export class DeletetransactionUseCase {
+export class DeleteTransactionUseCase {
     constructor(deleteTransactionRepository) {
         this.deleteTransactionRepository = deleteTransactionRepository
     }

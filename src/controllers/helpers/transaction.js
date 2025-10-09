@@ -13,3 +13,7 @@ export const checkIfAmountIsValid = (amount) => {
 export const checkIfTypeIsValid = (type) => {
     return ['EARNING', 'EXPENSE', 'INVESTIMENT'].includes(type)
 }
+
+export const transactionNotFoundResponse = () => ({
+    message: 'Transaction not found!',
+})
