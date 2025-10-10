@@ -11,6 +11,9 @@ import { DeleteUserUseCase } from '../../use-cases/user/delete-user.js'
 import { CreateUserUseCase } from '../../use-cases/user/create-user.js'
 import { GetUserByIdUseCase } from '../../use-cases/user/get-user-by-id.js'
 import { UpdateUserUseCase } from '../../use-cases/user/update-user.js'
+import { PostgresGetUserBalanceRepository } from '../../repositories/postgres/user/get-user-balance.js'
+import { GetUserBalanceUseCase } from '../../use-cases/user/get-user-balance.js'
+import { GetUserBalanceController } from '../../controllers/get-user-balance.js'
 
 export const makeGetUserByIdController = () => {
     const getUserByIdRepository = new PostgresGetUserByIdRepository()
@@ -50,4 +53,18 @@ export const makeDeleteUserController = () => {
     const deleteUserController = new DeleteUserController(deleteUserUseCase)
 
     return deleteUserController
+}
+
+export const makeGetUserBalanceController = () => {
+    const getUserBalanceRepository = new PostgresGetUserBalanceRepository()
+    const getUserByIdRepository = new PostgresGetUserByIdRepository()
+    const getUserBalanceUseCase = new GetUserBalanceUseCase(
+        getUserBalanceRepository,
+        getUserByIdRepository
+    )
+    const getUserBalanceController = new GetUserBalanceController(
+        getUserBalanceUseCase
+    )
+
+    return getUserBalanceController
 }

@@ -1,5 +1,5 @@
-import { serverError, ok } from './helpers/http'
-import { checkIfIdIsValid, invalidIdResponse } from './helpers/validation'
+import { serverError, ok } from './helpers/http.js'
+import { checkIfIdIsValid, invalidIdResponse } from './helpers/validation.js'
 
 export class GetUserBalanceController {
     constructor(getUserBalanceUseCase) {

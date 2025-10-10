@@ -11,7 +11,7 @@ import { makeCreateTransactionController } from './src/factories/controllers/tra
 import { makeGetTransactionsByUserIdController } from './src/factories/controllers/transaction.js'
 import { makeUpdateTransactionController } from './src/factories/controllers/transaction.js'
 import { makeDeleteTransactionController } from './src/factories/controllers/transaction.js'
-
+import { makeGetUserBalanceController } from './src/factories/controllers/user.js'
 const app = express()
 
 app.use(express.json())
@@ -20,6 +20,14 @@ app.get('/api/users/:userId', async (request, response) => {
     const getUserByIdController = makeGetUserByIdController()
 
     const { statusCode, body } = await getUserByIdController.execute(request)
+
+    response.status(statusCode).send(body)
+})
+
+app.get('/api/users/:userId/balance', async (request, response) => {
+    const getUserBalanceController = makeGetUserBalanceController()
+
+    const { statusCode, body } = await getUserBalanceController.execute(request)
 
     response.status(statusCode).send(body)
 })
