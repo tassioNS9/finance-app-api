@@ -39,3 +39,9 @@ export const createTransactionSchema = z.object({
             })
         ), // refine é como uma validação customizada do ZOd
 })
+
+export const updateTransactionSchema = createTransactionSchema
+    .omit({
+        user_id: true,
+    })
+    .partial() //O omit remove propriedades específicas nesse caso o user_id
