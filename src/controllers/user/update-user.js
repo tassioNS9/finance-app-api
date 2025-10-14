@@ -1,14 +1,10 @@
 import { badRequest, serverError, ok } from '../helpers/http.js'
 import validator from 'validator'
 import { EmailAlreadyInUseError } from '../../errors/user.js'
-import {
-    invalidPasswordResponse,
-    emailIsAlreadyInUseResponse,
-    checkIfPasswordIsValid,
-    checkIfEmailIsValid,
-} from '../helpers/user.js'
+import { updateUserSchema } from '../../schemas/user.js'
 
 import { invalidIdResponse } from '../helpers/validation.js'
+import { ZodError } from 'zod'
 
 export class UpdateUserController {
     constructor(updateUserUseCase) {
@@ -25,38 +21,8 @@ export class UpdateUserController {
             }
             const params = httpRequest.body
 
-            const allowedFields = [
-                'first_name',
-                'last_name',
-                'email',
-                'password',
-            ]
+            await updateUserSchema.parseAsync(params)
 
-            const someFieldIsNotAllowed = Object.keys(params).some(
-                (key) => !allowedFields.includes(key)
-            )
-
-            if (someFieldIsNotAllowed) {
-                return badRequest({
-                    message: 'Some field is not allowed to be updated!',
-                })
-            }
-
-            if (params.password) {
-                const passwordIsValid = checkIfPasswordIsValid(params.password)
-
-                if (!passwordIsValid) {
-                    return invalidPasswordResponse()
-                }
-            }
-
-            if (params.email) {
-                const emailIsValid = checkIfEmailIsValid(params.email)
-
-                if (!emailIsValid) {
-                    return emailIsAlreadyInUseResponse()
-                }
-            }
             const updatedUser = await this.updateUserUseCase.execute(
                 userId,
                 params
@@ -64,6 +30,11 @@ export class UpdateUserController {
 
             return ok(updatedUser)
         } catch (error) {
+            if (error instanceof ZodError) {
+                return badRequest({
+                    message: error.message,
+                })
+            }
             if (error instanceof EmailAlreadyInUseError) {
                 return badRequest({ message: error.message })
             }
