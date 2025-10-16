@@ -1,24 +1,57 @@
-import { PostgresHelper } from '../../../db/postgres/helper.js'
+import { Prisma, TransactionType } from '@prisma/client'
+import { prisma } from '../../../../prisma/prisma.js'
 
 export class PostgresGetUserBalanceRepository {
     async execute(userId) {
-        const balance = await PostgresHelper.query(
-            `SELECT 
-            SUM(CASE WHEN type = 'EARNING' THEN amount ELSE 0 END) AS earnings,
-            SUM(CASE WHEN type = 'EXPENSE' THEN amount ELSE 0 END) AS expenses,
-            SUM(Case WHEN type = 'INVESTIMENT' THEN amount ELSE 0 END) AS investiments,
-            (
-                SUM(CASE WHEN type = 'EARNING' THEN amount ELSE 0 END)
-                - SUM(CASE WHEN type = 'EXPENSE' THEN amount ELSE 0 END)
-                - SUM(CASE WHEN type = 'INVESTIMENT' THEN amount ELSE 0 END)
-            ) AS balance
-        FROM transactions
-        WHERE user_id = $1;`,
-            [userId]
-        )
+        const {
+            _sum: { amount: totalExpenses },
+        } = await prisma.transaction.aggregate({
+            where: {
+                user_id: userId,
+                type: TransactionType.EXPENSE,
+            },
+            _sum: {
+                amount: true,
+            },
+        })
+
+        const {
+            _sum: { amount: totalEarnings },
+        } = await prisma.transaction.aggregate({
+            where: {
+                user_id: userId,
+                type: TransactionType.EARNING,
+            },
+            _sum: {
+                amount: true,
+            },
+        })
+
+        const {
+            _sum: { amount: totalInvestments },
+        } = await prisma.transaction.aggregate({
+            where: {
+                user_id: userId,
+                type: TransactionType.INVESTMENT,
+            },
+            _sum: {
+                amount: true,
+            },
+        })
+
+        const _totalEarnings = totalEarnings || new Prisma.Decimal(0)
+        const _totalExpenses = totalExpenses || new Prisma.Decimal(0)
+        const _totalInvestments = totalInvestments || new Prisma.Decimal(0)
+
+        const balance = _totalEarnings
+            .minus(_totalExpenses)
+            .minus(_totalInvestments)
+
         return {
-            userId,
-            ...balance[0],
+            earnings: _totalEarnings,
+            expenses: _totalExpenses,
+            investments: _totalInvestments,
+            balance,
         }
     }
 }
