@@ -1,9 +1,7 @@
 import { badRequest, serverError, ok } from '../helpers/http.js'
-import validator from 'validator'
 import { EmailAlreadyInUseError } from '../../errors/user.js'
 import { updateUserSchema } from '../../schemas/user.js'
 
-import { invalidIdResponse } from '../helpers/validation.js'
 import { ZodError } from 'zod'
 
 export class UpdateUserController {
@@ -14,11 +12,6 @@ export class UpdateUserController {
         try {
             const userId = httpRequest.params.userId
 
-            const isIdValid = validator.isUUID(userId)
-
-            if (!isIdValid) {
-                return invalidIdResponse()
-            }
             const params = httpRequest.body
 
             await updateUserSchema.parseAsync(params)

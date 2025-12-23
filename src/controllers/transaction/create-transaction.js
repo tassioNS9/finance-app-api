@@ -10,7 +10,7 @@ export class CreateTransactionController {
         try {
             const params = httpRequest.body
 
-            await createTransactionSchema.parseAsync(params)
+            await createTransactionSchema.parseAsync(params) // O ParseAsync para fazer a validação de forma assincrona
 
             const createdTransaction =
                 await this.createTransactionUseCase.execute(params)

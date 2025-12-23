@@ -17,7 +17,7 @@ export class UpdateTransactionController {
 
             const params = httpRequest.body
 
-            await updateTransactionSchema.parseAsync(params)
+            await updateTransactionSchema.parseAsync(params) // O ParseAsync para fazer a validação de forma assincrona
 
             const transaction = await this.updateTransactionUseCase.execute(
                 httpRequest.params.transactionId,
