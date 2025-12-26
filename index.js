@@ -86,6 +86,7 @@ app.patch('/api/transactions/:transactionId', async (request, response) => {
 
 app.delete('/api/transactions/:transactionId', async (request, response) => {
     const deleteTransactionController = makeDeleteTransactionController()
+
     const { statusCode, body } = await deleteTransactionController.execute(
         request
     )

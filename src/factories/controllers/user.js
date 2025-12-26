@@ -36,8 +36,8 @@ export const makeCreateUserController = () => {
 }
 
 export const makeUpdateUserController = () => {
-    const updateUserRepository = new PostgresUpdateUserRepository()
     const getUserByEmailRepository = new PostgresGetUserByEmailRepository()
+    const updateUserRepository = new PostgresUpdateUserRepository()
     const updateUserUseCase = new UpdateUserUseCase(
         getUserByEmailRepository,
         updateUserRepository

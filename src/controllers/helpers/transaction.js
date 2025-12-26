@@ -1,4 +1,5 @@
 import validator from 'validator'
+import { notFound } from './http.js'
 
 export const checkIfAmountIsValid = (amount) => {
     if (typeof amount !== 'number') {
@@ -14,6 +15,5 @@ export const checkIfTypeIsValid = (type) => {
     return ['EARNING', 'EXPENSE', 'INVESTIMENT'].includes(type)
 }
 
-export const transactionNotFoundResponse = () => ({
-    message: 'Transaction not found!',
-})
+export const transactionNotFoundResponse = () =>
+    notFound({ message: 'Transaction not found.' })
