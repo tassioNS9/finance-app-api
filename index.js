@@ -13,12 +13,12 @@ import { makeGetTransactionsByUserIdController } from './src/factories/controlle
 import { makeUpdateTransactionController } from './src/factories/controllers/transaction.js'
 import { makeDeleteTransactionController } from './src/factories/controllers/transaction.js'
 import { makeGetUserBalanceController } from './src/factories/controllers/user.js'
-import { LoginUserController } from './src/controllers/login-user.js'
+import { auth } from './middlewares/auth.js'
 const app = express()
 
 app.use(express.json())
 
-app.get('/api/users/:userId', async (request, response) => {
+app.get('/api/users/:userId', auth, async (request, response) => {
     const getUserByIdController = makeGetUserByIdController()
 
     const { statusCode, body } = await getUserByIdController.execute(request)
@@ -42,7 +42,7 @@ app.post('/api/users', async (request, response) => {
     response.status(statusCode).send(body)
 })
 
-app.patch('/api/users/:userId', async (request, response) => {
+app.patch('/api/users/:userId', auth, async (request, response) => {
     const updateUserController = makeUpdateUserController()
 
     const { statusCode, body } = await updateUserController.execute(request)
@@ -50,7 +50,7 @@ app.patch('/api/users/:userId', async (request, response) => {
     response.status(statusCode).send(body)
 })
 
-app.delete('/api/users/:userId', async (request, response) => {
+app.delete('/api/users/:userId ', auth, async (request, response) => {
     const deleteUserController = makeDeleteUserController()
 
     const { statusCode, body } = await deleteUserController.execute(request)
