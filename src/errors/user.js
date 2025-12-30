@@ -10,3 +10,9 @@ export class UserNotFoundError extends Error {
         super('User not found with ID: ' + userId)
     }
 }
+
+export class InvalidPasswordError extends Error {
+    constructor() {
+        super('Invalid Password')
+    }
+}
