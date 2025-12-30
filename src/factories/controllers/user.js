@@ -14,6 +14,8 @@ import { UpdateUserUseCase } from '../../use-cases/user/update-user.js'
 import { PostgresGetUserBalanceRepository } from '../../repositories/postgres/user/get-user-balance.js'
 import { GetUserBalanceUseCase } from '../../use-cases/user/get-user-balance.js'
 import { GetUserBalanceController } from '../../controllers/get-user-balance.js'
+import { LoginUserUseCase } from '../../use-cases/user/login-user.js'
+import { LoginUserController } from '../../controllers/login-user.js'
 
 export const makeGetUserByIdController = () => {
     const getUserByIdRepository = new PostgresGetUserByIdRepository()
@@ -67,4 +69,12 @@ export const makeGetUserBalanceController = () => {
     )
 
     return getUserBalanceController
+}
+
+export const makeLoginUserController = () => {
+    const getUserByEmailRepository = new PostgresGetUserByEmailRepository()
+    const loginUserUseCase = new LoginUserUseCase(getUserByEmailRepository)
+    const loginUserController = new LoginUserController(loginUserUseCase)
+
+    return loginUserController
 }
