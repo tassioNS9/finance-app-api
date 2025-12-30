@@ -36,3 +36,25 @@ export const createUserSchema = z.object({
 export const updateUserSchema = createUserSchema.partial().strict({
     message: 'Some provided field is not allowed',
 }) // Deixa os campos opcionais e o strict para exigir que aceite somente esses campos
+
+export const loginUserSchema = z.object({
+    email: z
+        .string({
+            error: 'E-mail is required',
+        })
+        .z.email({
+            error: 'Please provide a valid e-mail',
+        })
+        .trim()
+        .min(1, {
+            error: 'E-mail is required.',
+        }),
+    password: z
+        .string({
+            error: 'Password is required.',
+        })
+        .trim()
+        .min(6, {
+            error: 'Password must have at least 6 characters.',
+        }),
+})
