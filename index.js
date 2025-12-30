@@ -1,9 +1,10 @@
-import express from 'express'
+import express, { response } from 'express'
 import 'dotenv/config.js'
 import {
     makeCreateUserController,
     makeDeleteUserController,
     makeGetUserByIdController,
+    makeLoginUserController,
     makeUpdateUserController,
 } from './src/factories/controllers/user.js'
 
@@ -12,6 +13,7 @@ import { makeGetTransactionsByUserIdController } from './src/factories/controlle
 import { makeUpdateTransactionController } from './src/factories/controllers/transaction.js'
 import { makeDeleteTransactionController } from './src/factories/controllers/transaction.js'
 import { makeGetUserBalanceController } from './src/factories/controllers/user.js'
+import { LoginUserController } from './src/controllers/login-user.js'
 const app = express()
 
 app.use(express.json())
@@ -52,6 +54,13 @@ app.delete('/api/users/:userId', async (request, response) => {
     const deleteUserController = makeDeleteUserController()
 
     const { statusCode, body } = await deleteUserController.execute(request)
+
+    response.status(statusCode).send(body)
+})
+
+app.post('/api/login', async (request, response) => {
+    const loginUserController = makeLoginUserController()
+    const { statusCode, body } = await loginUserController.execute(request)
 
     response.status(statusCode).send(body)
 })
