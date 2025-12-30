@@ -1,4 +1,4 @@
-import { InvalidPasswordError, UserNotFoundError } from '../../errors/user'
+import { InvalidPasswordError, UserNotFoundError } from '../../errors/user.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 export class LoginUserUseCase {

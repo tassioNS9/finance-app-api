@@ -42,7 +42,7 @@ export const loginUserSchema = z.object({
         .string({
             error: 'E-mail is required',
         })
-        .z.email({
+        .email({
             error: 'Please provide a valid e-mail',
         })
         .trim()
