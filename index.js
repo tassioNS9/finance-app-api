@@ -18,18 +18,29 @@ const app = express()
 
 app.use(express.json())
 
-app.get('/api/users/:userId', auth, async (request, response) => {
+app.get('/api/users', auth, async (request, response) => {
     const getUserByIdController = makeGetUserByIdController()
 
-    const { statusCode, body } = await getUserByIdController.execute(request)
+    const { statusCode, body } = await getUserByIdController.execute({
+        // Com isso passamos o id do Usuário logado e ele só pegar suas informações próprias
+        ...request,
+        params: {
+            userId: request.userId,
+        },
+    })
 
     response.status(statusCode).send(body)
 })
 
-app.get('/api/users/:userId/balance', async (request, response) => {
+app.get('/api/users/balance', auth, async (request, response) => {
     const getUserBalanceController = makeGetUserBalanceController()
 
-    const { statusCode, body } = await getUserBalanceController.execute(request)
+    const { statusCode, body } = await getUserBalanceController.execute({
+        ...request,
+        params: {
+            userId: request.userId,
+        },
+    })
 
     response.status(statusCode).send(body)
 })
@@ -65,33 +76,52 @@ app.post('/api/login', async (request, response) => {
     response.status(statusCode).send(body)
 })
 
-app.post('/api/transactions', async (request, response) => {
+app.post('/api/transactions', auth, async (request, response) => {
     const createTransactionController = makeCreateTransactionController()
 
-    const { statusCode, body } = await createTransactionController.execute(
-        request
-    )
+    const { statusCode, body } = await createTransactionController.execute({
+        ...request,
+        body: {
+            ...request.body,
+            user_id: request.userId,
+        },
+    })
 
     response.status(statusCode).send(body)
 })
 
-app.get('/api/transactions', async (request, response) => {
+app.get('/api/transactions', auth, async (request, response) => {
     const getTransactionsByUserIdController =
         makeGetTransactionsByUserIdController()
 
     const { statusCode, body } =
-        await getTransactionsByUserIdController.execute(request)
+        await getTransactionsByUserIdController.execute({
+            // Com isso apenas o usuario logado só pode ter acesso a suas proprias transações
+            ...request,
+            query: {
+                ...request.query,
+                userId: request.userId,
+            },
+        })
 
     response.status(statusCode).send(body)
 })
 
-app.patch('/api/transactions/:transactionId', async (request, response) => {
-    const updateTransactionController = makeUpdateTransactionController()
-    const { statusCode, body } = await updateTransactionController.execute(
-        request
-    )
-    response.status(statusCode).send(body)
-})
+app.patch(
+    '/api/transactions/:transactionId',
+    auth,
+    async (request, response) => {
+        const updateTransactionController = makeUpdateTransactionController()
+        const { statusCode, body } = await updateTransactionController.execute({
+            ...request,
+            body: {
+                ...request.body,
+                user_id: request.userId,
+            },
+        })
+        response.status(statusCode).send(body)
+    }
+)
 
 app.delete('/api/transactions/:transactionId', async (request, response) => {
     const deleteTransactionController = makeDeleteTransactionController()
