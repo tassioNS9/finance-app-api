@@ -1,6 +1,6 @@
 import { UnauthorizedError } from '../../errors/user.js'
 import { ZodError } from 'zod'
-import { refreshTokenSchema } from '../../schemas/user'
+import { refreshTokenSchema } from '../../schemas/user.js'
 import { badRequest, ok, serverError, unauthorized } from '../helpers/http.js'
 
 export class RefreshTokenController {
