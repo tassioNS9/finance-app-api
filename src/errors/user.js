@@ -16,3 +16,10 @@ export class InvalidPasswordError extends Error {
         super('Invalid Password')
     }
 }
+
+export class ForbiddenError extends Error {
+    constructor() {
+        super('Forbidden.')
+        this.name = 'ForbiddenError'
+    }
+}

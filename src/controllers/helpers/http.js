@@ -43,3 +43,12 @@ export const unauthorized = () => {
         },
     }
 }
+
+export const forbidden = () => {
+    return {
+        statusCode: 403,
+        body: {
+            message: 'Forbidden',
+        },
+    }
+}

@@ -5,6 +5,7 @@ import { CreateTransactionUseCase } from '../../use-cases/transaction/create-tra
 import { GetTransactionsByUserIdController } from '../../controllers/transaction/get-transactions-by-user-id.js'
 import { GetTransactionsByUserIdUseCase } from '../../use-cases/transaction/get-transactions-by-user-id.js'
 import { PostgresGetTransactionsByUserId } from '../../repositories/postgres/transaction/get-transactions-by-user-id.js'
+import { PostgresGetTransactionByIdRepository } from '../../repositories/postgres/transaction/get-transaction-by-id.js'
 import { UpdateTransactionController } from '../../controllers/transaction/update-transactions.js'
 import { UpdateTransactionUseCase } from '../../use-cases/transaction/update-transactions.js'
 import { PostgresUpdateTransactionsRepository } from '../../repositories/postgres/transaction/update-transactions.js'
@@ -43,9 +44,12 @@ export const makeGetTransactionsByUserIdController = () => {
 export const makeUpdateTransactionController = () => {
     const updateTrasactionRepository =
         new PostgresUpdateTransactionsRepository()
+    const getTransactionByIdRepository =
+        new PostgresGetTransactionByIdRepository()
 
     const updateTransactionUseCase = new UpdateTransactionUseCase(
-        updateTrasactionRepository
+        updateTrasactionRepository,
+        getTransactionByIdRepository
     )
 
     const updateTransactionController = new UpdateTransactionController(
