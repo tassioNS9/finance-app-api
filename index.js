@@ -1,4 +1,4 @@
-import express, { response } from 'express'
+import express from 'express'
 import 'dotenv/config.js'
 import {
     makeCreateUserController,
@@ -8,15 +8,21 @@ import {
     makeRefreshTokenController,
     makeUpdateUserController,
 } from './src/factories/controllers/user.js'
-
+import cors from 'cors'
 import { makeCreateTransactionController } from './src/factories/controllers/transaction.js'
 import { makeGetTransactionsByUserIdController } from './src/factories/controllers/transaction.js'
 import { makeUpdateTransactionController } from './src/factories/controllers/transaction.js'
 import { makeDeleteTransactionController } from './src/factories/controllers/transaction.js'
 import { makeGetUserBalanceController } from './src/factories/controllers/user.js'
 import { auth } from './middlewares/auth.js'
-const app = express()
 
+const app = express()
+app.use(
+    cors({
+        origin: 'http://localhost:5173', // frontend
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    })
+)
 app.use(express.json())
 
 app.get('/api/users', auth, async (request, response) => {
@@ -24,6 +30,21 @@ app.get('/api/users', auth, async (request, response) => {
 
     const { statusCode, body } = await getUserByIdController.execute({
         // Com isso passamos o id do Usuário logado e ele só pegar suas informações próprias
+        ...request,
+        params: {
+            userId: request.userId,
+        },
+    })
+
+    response.status(statusCode).send(body)
+})
+
+app.get('/api/me', auth, async (request, response) => {
+    const getUserByIdController = makeGetUserByIdController()
+
+    console.log('Usuário autenticado: ', request.userId)
+
+    const { statusCode, body } = await getUserByIdController.execute({
         ...request,
         params: {
             userId: request.userId,
