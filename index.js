@@ -39,7 +39,7 @@ app.get('/api/users', auth, async (request, response) => {
     response.status(statusCode).send(body)
 })
 
-app.get('/api/me', auth, async (request, response) => {
+app.get('/api/users/me', auth, async (request, response) => {
     const getUserByIdController = makeGetUserByIdController()
 
     console.log('Usuário autenticado: ', request.userId)
