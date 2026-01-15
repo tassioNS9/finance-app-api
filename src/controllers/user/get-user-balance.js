@@ -1,9 +1,9 @@
-import { serverError, ok } from './helpers/http.js'
-import { UserNotFoundError } from '../errors/user.js'
-import { getUserBalanceSchema } from '../schemas/user.js'
-import { userNotFoundResponse } from './helpers/user.js'
+import { serverError, ok } from '../helpers/http.js'
+import { UserNotFoundError } from '../../errors/user.js'
+import { getUserBalanceSchema } from '../../schemas/user.js'
+import { userNotFoundResponse } from '../helpers/user.js'
 import { ZodError } from 'zod'
-import { badRequest } from './helpers/http.js'
+import { badRequest } from '../helpers/http.js'
 
 export class GetUserBalanceController {
     constructor(getUserBalanceUseCase) {
