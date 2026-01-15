@@ -10,9 +10,6 @@ export class UpdateTransactionUseCase {
         const transaction = await this.getTransactionByIdRepository.execute(
             transactionId
         )
-        console.log(transaction, 'djsldsd')
-
-        console.log(params, 'params')
 
         if (params.user_id && transaction.user_id !== params.user_id) {
             // Verifica se o ID da transação é refente ao usuário logado
