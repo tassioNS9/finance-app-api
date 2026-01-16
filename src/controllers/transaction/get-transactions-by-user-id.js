@@ -1,12 +1,8 @@
 import { UserNotFoundError } from '../../errors/user.js'
-import { serverError, ok } from '../helpers/http.js'
+import { getTransactionsSchema } from '../../schemas/transactions.js'
+import { serverError, ok, badRequest } from '../helpers/http.js'
 import { userNotFoundResponse } from '../helpers/user.js'
-import {
-    checkIfIdIsValid,
-    invalidIdResponse,
-    requiredFieldIsMissingResponse,
-} from '../helpers/validation.js'
-
+import { ZodError } from 'zod'
 export class GetTransactionsByUserIdController {
     constructor(getTransactionsByUserIdUseCase) {
         this.getTransactionsByUserIdUseCase = getTransactionsByUserIdUseCase
@@ -14,21 +10,21 @@ export class GetTransactionsByUserIdController {
 
     async execute(httpRequest) {
         try {
-            const userId = httpRequest.query.userId
+            const userId = httpRequest.params.userId
+            const from = httpRequest.query.from
+            const to = httpRequest.query.to
 
-            if (!userId) {
-                return requiredFieldIsMissingResponse('userId')
-            }
-
-            const userIdIsValid = checkIfIdIsValid(userId)
-
-            if (!userIdIsValid) {
-                return invalidIdResponse()
-            }
+            await getTransactionsSchema.parseAsync({
+                user_id: userId,
+                from,
+                to,
+            })
 
             const transactions =
                 await this.getTransactionsByUserIdUseCase.execute({
                     userId,
+                    from,
+                    to,
                 })
 
             return ok(transactions)
@@ -37,6 +33,11 @@ export class GetTransactionsByUserIdController {
 
             if (error instanceof UserNotFoundError) {
                 return userNotFoundResponse()
+            }
+            if (error instanceof ZodError) {
+                return badRequest({
+                    message: error.errors[0].message,
+                })
             }
 
             return serverError()

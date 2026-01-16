@@ -128,9 +128,12 @@ app.get('/api/transactions', auth, async (request, response) => {
         await getTransactionsByUserIdController.execute({
             // Com isso apenas o usuario logado só pode ter acesso a suas proprias transações
             ...request,
-            query: {
-                ...request.query,
+            params: {
                 userId: request.userId,
+            },
+            query: {
+                from: request.query.from,
+                to: request.query.to,
             },
         })
 
