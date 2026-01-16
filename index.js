@@ -20,7 +20,7 @@ const app = express()
 app.use(
     cors({
         origin: 'http://localhost:5173', // frontend
-        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     })
 )
 app.use(express.json())
