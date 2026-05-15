@@ -20,7 +20,7 @@ const app = express()
 app.use(
     cors({
         origin: 'http://localhost:5173', // frontend
-        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     })
 )
 app.use(express.json())
@@ -41,8 +41,6 @@ app.get('/api/users', auth, async (request, response) => {
 
 app.get('/api/users/me', auth, async (request, response) => {
     const getUserByIdController = makeGetUserByIdController()
-
-    console.log('Usuário autenticado: ', request.userId)
 
     const { statusCode, body } = await getUserByIdController.execute({
         ...request,
@@ -130,9 +128,12 @@ app.get('/api/transactions', auth, async (request, response) => {
         await getTransactionsByUserIdController.execute({
             // Com isso apenas o usuario logado só pode ter acesso a suas proprias transações
             ...request,
-            query: {
-                ...request.query,
+            params: {
                 userId: request.userId,
+            },
+            query: {
+                from: request.query.from,
+                to: request.query.to,
             },
         })
 

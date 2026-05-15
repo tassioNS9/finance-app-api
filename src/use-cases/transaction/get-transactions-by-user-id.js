@@ -15,7 +15,11 @@ export class GetTransactionsByUserIdUseCase {
         }
 
         const transactions =
-            await this.getTransactionsByUserIdRepository.execute(params.userId)
+            await this.getTransactionsByUserIdRepository.execute(
+                params.userId,
+                params.from,
+                params.to
+            )
 
         return transactions
     }
