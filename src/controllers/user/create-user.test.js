@@ -26,7 +26,23 @@ describe('Create User Controller', () => {
         expect(result.body).toEqual(httpRequest.body)
     })
 
-    it('should return 400 when missing required fields', async () => {
+    it('should return 400 if first_name is not provided', async () => {
+        // arrange
+        const createUserUseCase = new CreateUserUseCaseStub()
+        const createUserController = new CreateUserController(createUserUseCase)
+        const httpRequest = {
+            body: {
+                last_name: 'John Doe',
+                email: 'john.doe@example.com',
+                password: 'password123',
+            },
+        }
+        const result = await createUserController.execute(httpRequest)
+        // assert
+        expect(result.statusCode).toBe(400)
+    })
+
+    it('should return 400 if last_name is not provided', async () => {
         // arrange
         const createUserUseCase = new CreateUserUseCaseStub()
         const createUserController = new CreateUserController(createUserUseCase)
