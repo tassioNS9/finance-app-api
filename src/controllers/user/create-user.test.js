@@ -116,11 +116,7 @@ describe('Create User Controller', () => {
     })
 
     it('should return 500 if CreateUserCase throws an error', async () => {
-        class CreateUserUseCaseStub {
-            execute(userData) {
-                throw new Error()
-            }
-        }
+
         // arrange
         const { sut, createUserUseCase } = makeSut()
         jest.spyOn(createUserUseCase, 'execute').mockImplementationOnce(() => {
