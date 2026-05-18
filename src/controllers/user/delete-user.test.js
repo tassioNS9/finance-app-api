@@ -53,7 +53,11 @@ describe('DeleteUserController', () => {
     it('should return 404 if user is not found', async () => {
         // arrange
         const { sut, deleteUserUseCase } = makeSut()
-        jest.spyOn(deleteUserUseCase, 'execute').mockReturnValueOnce(null)
+        // O mockResolvedValue é usado para simular o retorno de uma promessa resolvida, 
+        // ou seja, um valor sendo retornado com sucesso dentro da função assíncrona. 
+        // Isso é útil para testar o comportamento do controlador quando o 
+        // caso de uso retorna um resultado específico, como null ou um objeto.
+        jest.spyOn(deleteUserUseCase, 'execute').mockResolvedValue(null)
         // act
         const response = await sut.execute(httpRequest)
         // assert
@@ -63,9 +67,7 @@ describe('DeleteUserController', () => {
     it('should return 500 if DeleteUserUseCase throws an error', async () => {
         // arrange
         const { sut, deleteUserUseCase } = makeSut()
-        jest.spyOn(deleteUserUseCase, 'execute').mockImplementationOnce(() => {
-            throw new Error()
-        })
+        jest.spyOn(deleteUserUseCase, 'execute').mockRejectedValueOnce(new Error())
         // act
         const response = await sut.execute(httpRequest)
         // assert

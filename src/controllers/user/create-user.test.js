@@ -3,7 +3,7 @@ import { CreateUserController } from './create-user'
 import { faker } from '@faker-js/faker'
 describe('Create User Controller', () => {
     class CreateUserUseCaseStub {
-        execute(userData) {
+      async  execute(userData) {
             return userData
         }
     }
@@ -119,9 +119,7 @@ describe('Create User Controller', () => {
 
         // arrange
         const { sut, createUserUseCase } = makeSut()
-        jest.spyOn(createUserUseCase, 'execute').mockImplementationOnce(() => {
-            throw new Error('Database error')
-        })
+        jest.spyOn(createUserUseCase, 'execute').mockRejectedValueOnce( new Error('Database error'))
 
         // act
         const result = await sut.execute(httpRequest)
@@ -133,9 +131,7 @@ describe('Create User Controller', () => {
     it('should return 500 if CreateUserUseCase throws EmailAlreadyInUseError', async () => {
         //arange
         const { createUserUseCase, sut } = makeSut()
-        jest.spyOn(createUserUseCase, 'execute').mockImplementationOnce(() => {
-            throw new EmailAlreadyInUseError(httpRequest.body.email)
-        })
+        jest.spyOn(createUserUseCase, 'execute').mockRejectedValueOnce(new EmailAlreadyInUseError(httpRequest.body.email))
 
         // act
         const result = await sut.execute(httpRequest)

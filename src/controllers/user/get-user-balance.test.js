@@ -49,5 +49,19 @@ describe('getUserBalanceController', () => {
         // assert
         expect(httpResponse.statusCode).toBe(400)
     })
+
+    it('should return 500 if GetUserBalanceUseCase throws an error', async () => {
+        // arrange
+        const { sut, getUserBalanceUseCase } = makeSut()
+        // O mockRejectedValueOnce é usado para simular uma rejeição de promessa, ou seja, um erro sendo lançado 
+        // dentro da função assíncrona. 
+        // Isso é útil para testar como o controlador lida com erros inesperados 
+        // que podem ocorrer durante a execução do caso de uso.
+        jest.spyOn(getUserBalanceUseCase, 'execute').mockRejectedValueOnce(new Error())
+        // act
+        const httpResponse = await sut.execute(httpRequest)
+        // assert
+        expect(httpResponse.statusCode).toBe(500)
+    })
 })
 
