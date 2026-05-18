@@ -3,7 +3,7 @@ import { DeleteUserController } from './delete-user.js'
 
 describe('DeleteUserController', () => {
     class DeleteUserUseCaseStub {
-        async execute(userId) {
+        async execute() {
             return {
                 id: faker.string.uuid(),
                 first_name: faker.person.firstName(),
@@ -28,7 +28,6 @@ describe('DeleteUserController', () => {
     it('should return 200 when deleting a user successfully', async () => {
         // arrange
         const { sut } = makeSut()
-        const userId = faker.string.uuid()
 
         // act
         const response = await sut.execute(httpRequest)
