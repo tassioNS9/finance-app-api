@@ -26,16 +26,11 @@ export class GetUserBalanceController {
 
             return ok(balance)
         } catch (error) {
-            console.error(error)
 
-            if (error instanceof UserNotFoundError) {
-                return userNotFoundResponse()
-            }
-            if (error instanceof ZodError) {
-                return badRequest({
-                    message: error.errors[0].message,
-                })
-            }
+            if (error instanceof UserNotFoundError) return userNotFoundResponse()
+            
+            if (error instanceof ZodError) return badRequest({message: error.errors[0].message})
+            
             return serverError()
         }
     }
