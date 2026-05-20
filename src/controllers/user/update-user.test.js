@@ -26,7 +26,7 @@ describe('updateUserController', () => {
             password: faker.internet.password({ length: 7 }),
         },
     }
-    it('should update user information successfully', async () => {
+    it('should return 200 when user is updated successfully', async () => {
         // arrange
         const { sut } = makeSut()
 
@@ -35,5 +35,19 @@ describe('updateUserController', () => {
 
         // assert
         expect(response.statusCode).toBe(200)
+    })
+
+    it('should return 400 if email is not provided', async () => {
+        // arrange
+        const { sut } = makeSut()
+        const result = await sut.execute({
+            params: httpRequest.params,
+            body: {
+                ...httpRequest.body,
+                email: 'invalid-email',
+            },
+        })
+        // assert
+        expect(result.statusCode).toBe(400)
     })
 })
