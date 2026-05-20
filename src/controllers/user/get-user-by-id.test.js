@@ -33,4 +33,41 @@ describe('getUserByIdController', () => {
         // assert
         expect(httpResponse.statusCode).toBe(200)
     })
+
+    it('should return 400 when userId is invalid', async () => {
+        //arrange
+        const { sut } = makeSut()
+
+        //act
+        const httpResponse = await sut.execute({
+            params: {
+                userId: 'invalid-uuid',
+            },
+        })
+
+        // assert
+        expect(httpResponse.statusCode).toBe(400)
+    })
+    it('should return 404 if user is not found', async () => {
+        // arrange
+        const { sut, getUserByIdUseCase } = makeSut()
+
+        jest.spyOn(getUserByIdUseCase, 'execute').mockResolvedValue(null)
+        // act
+        const response = await sut.execute(httpRequest)
+        // assert
+        expect(response.statusCode).toBe(404)
+    })
+
+    it('should return 500 if GetUserByIdUseCase throws an error', async () => {
+        // arrange
+        const { sut, getUserByIdUseCase } = makeSut()
+        jest.spyOn(getUserByIdUseCase, 'execute').mockRejectedValueOnce(
+            new Error(),
+        )
+        // act
+        const httpResponse = await sut.execute(httpRequest)
+        // assert
+        expect(httpResponse.statusCode).toBe(500)
+    })
 })

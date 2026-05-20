@@ -16,7 +16,7 @@ export class GetUserByIdController {
             }
 
             const user = await this.getUserByIdUseCase.execute(
-                httpRequest.params.userId
+                httpRequest.params.userId,
             )
 
             if (!user) {
