@@ -3,8 +3,20 @@ import { DeleteTransactionController } from './delete-transaction.js'
 
 describe('Delete Transaction Controller', () => {
     class DeleteTransactionUseCaseStub {
-        async execute(transaction) {
-            return transaction
+        async execute() {
+            return {
+                id: faker.datatype.uuid(),
+                user_id: faker.datatype.uuid(),
+                name: faker.person.jobDescriptor(),
+                date: faker.date.recent().toISOString(),
+                type: faker.helpers.arrayElement([
+                    'EXPENSE',
+                    'EARNING',
+                    'INVESTMENT',
+                ]),
+                amount: faker.datatype.number(),
+                description: faker.lorem.sentence(),
+            }
         }
     }
 
@@ -30,7 +42,6 @@ describe('Delete Transaction Controller', () => {
         // arrange
         const { sut } = makeSut()
         const result = await sut.execute({
-            ...httpRequest,
             params: {
                 transactionId: 'invalid-uuid',
             },
