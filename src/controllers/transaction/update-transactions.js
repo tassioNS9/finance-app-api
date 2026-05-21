@@ -22,7 +22,7 @@ export class UpdateTransactionController {
 
             const transaction = await this.updateTransactionUseCase.execute(
                 httpRequest.params.transactionId,
-                params
+                params,
             )
 
             return ok(transaction)
