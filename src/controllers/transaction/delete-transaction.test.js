@@ -26,4 +26,16 @@ describe('Delete Transaction Controller', () => {
         // assert
         expect(result.statusCode).toBe(200)
     })
+    it('should return 400 if transactionId is not a valid uuid', async () => {
+        // arrange
+        const { sut } = makeSut()
+        const result = await sut.execute({
+            ...httpRequest,
+            params: {
+                transactionId: 'invalid-uuid',
+            },
+        })
+        // assert
+        expect(result.statusCode).toBe(400)
+    })
 })
