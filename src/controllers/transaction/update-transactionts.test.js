@@ -107,6 +107,21 @@ describe('Update Transaction Controller', () => {
         })
         expect(result.statusCode).toBe(400)
     })
+    it('should call UpdateTransactionUseCase with correct params', async () => {
+        // arrange
+        const { sut, updateTransactionUseCase } = makeSut()
+        const executeSpy = jest.spyOn(updateTransactionUseCase, 'execute')
+
+        // act
+        await sut.execute(httpRequest)
+
+        // assert
+        expect(executeSpy).toHaveBeenCalledWith(
+            httpRequest.params.transactionId,
+            httpRequest.body,
+        )
+        expect(executeSpy).toHaveBeenCalledTimes(1)
+    })
 
     it('should return 500 if an unexpected error occurs', async () => {
         // arrange
