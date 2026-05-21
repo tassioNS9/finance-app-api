@@ -5,8 +5,8 @@ describe('Update Transaction Controller', () => {
     class UpdateTransactionUseCaseStub {
         async execute() {
             return {
-                id: faker.datatype.uuid(),
-                user_id: faker.datatype.uuid(),
+                id: faker.string.uuid(),
+                user_id: faker.string.uuid(),
                 name: faker.person.jobDescriptor(),
                 date: faker.date.recent().toISOString(),
                 type: faker.helpers.arrayElement([
@@ -15,7 +15,6 @@ describe('Update Transaction Controller', () => {
                     'INVESTMENT',
                 ]),
                 amount: faker.datatype.number(),
-                description: faker.lorem.sentence(),
             }
         }
     }
@@ -26,7 +25,7 @@ describe('Update Transaction Controller', () => {
     }
     const httpRequest = {
         params: {
-            transactionId: faker.datatype.uuid(),
+            transactionId: faker.string.uuid(),
         },
         body: {
             name: faker.person.jobDescriptor(),
@@ -37,7 +36,6 @@ describe('Update Transaction Controller', () => {
                 'INVESTMENT',
             ]),
             amount: faker.datatype.number(),
-            description: faker.lorem.sentence(),
         },
     }
     it('should return 200 when updating transaction successfully', async () => {
@@ -52,7 +50,6 @@ describe('Update Transaction Controller', () => {
         const { sut } = makeSut()
 
         const result = await sut.execute({
-            ...httpRequest,
             params: {
                 transactionId: 'invalid_transaction_id',
             },
@@ -93,6 +90,19 @@ describe('Update Transaction Controller', () => {
             body: {
                 ...httpRequest.body,
                 date: 'invalid_date',
+            },
+        })
+        expect(result.statusCode).toBe(400)
+    })
+
+    it('should return 400 when unallowed fields are provided', async () => {
+        const { sut } = makeSut()
+
+        const result = await sut.execute({
+            ...httpRequest,
+            body: {
+                ...httpRequest.body,
+                unallowedField: 'unallowed_value',
             },
         })
         expect(result.statusCode).toBe(400)
