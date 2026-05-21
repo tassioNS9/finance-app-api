@@ -36,7 +36,7 @@ export const createTransactionSchema = z.object({
                 digits_after_decimal: [2],
                 allow_negatives: false,
                 decimal_separator: '.',
-            })
+            }),
         ), // refine é como uma validação customizada do ZOd
 })
 
@@ -44,7 +44,10 @@ export const updateTransactionSchema = createTransactionSchema
     .omit({
         user_id: true,
     })
-    .partial() //O omit remove propriedades específicas nesse caso o user_id
+    .partial()
+    .strict({
+        message: 'Some provided field is not allowed.',
+    }) //O omit remove propriedades específicas nesse caso o user_id
 
 export const getTransactionsSchema = z.object({
     user_id: z.string().uuid(),
