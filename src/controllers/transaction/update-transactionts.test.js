@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { UpdateTransactionController } from './update-transactions'
+import { ForbiddenError } from '../../errors/user.js'
 
 describe('Update Transaction Controller', () => {
     class UpdateTransactionUseCaseStub {
@@ -123,6 +124,18 @@ describe('Update Transaction Controller', () => {
         expect(executeSpy).toHaveBeenCalledTimes(1)
     })
 
+    it('should return 403 if user tries to update a transaction that does not belong to them', async () => {
+        // arrange
+        const { sut, updateTransactionUseCase } = makeSut()
+        jest.spyOn(updateTransactionUseCase, 'execute').mockRejectedValueOnce(
+            new ForbiddenError(),
+        )
+
+        // act
+        const result = await sut.execute(httpRequest)
+        // assert
+        expect(result.statusCode).toBe(403)
+    })
     it('should return 500 if an unexpected error occurs', async () => {
         // arrange
         const { sut, updateTransactionUseCase } = makeSut()
