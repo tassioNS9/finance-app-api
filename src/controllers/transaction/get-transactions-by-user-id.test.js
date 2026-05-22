@@ -110,7 +110,7 @@ describe('GetTransactionsByUserIdController', () => {
         expect(result.statusCode).toBe(400)
     })
 
-    it('should return 404 if user is not found', async () => {
+    it('should return 404 when GetTransactionsByUserIdUseCase throws UserNotFoundError', async () => {
         // arrange
         const { sut, getTransactionsByUserIdUseCase } = makeSut()
         jest.spyOn(
