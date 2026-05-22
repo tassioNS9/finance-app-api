@@ -34,6 +34,7 @@ export class GetTransactionsByUserIdController {
             if (error instanceof UserNotFoundError) {
                 return userNotFoundResponse()
             }
+
             if (error instanceof ZodError) {
                 return badRequest({
                     message: error.errors[0].message,

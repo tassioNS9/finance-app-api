@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { GetTransactionsByUserIdController } from './get-transactions-by-user-id.js'
-
+import { UserNotFoundError } from '../../errors/user.js'
 describe('GetTransactionsByUserIdController', () => {
     class GetTransactionsByUserIdUseCaseStub {
         async execute() {
@@ -16,7 +16,6 @@ describe('GetTransactionsByUserIdController', () => {
                         'INVESTMENT',
                     ]),
                     amount: faker.datatype.number(),
-                    description: 'Test transaction',
                 },
             ]
         }
@@ -56,7 +55,7 @@ describe('GetTransactionsByUserIdController', () => {
         const { sut } = makeSut()
         const invalidHttpRequest = {
             ...httpRequest,
-            params: {},
+            params: { userId: undefined },
         }
         // act
         const result = await sut.execute(invalidHttpRequest)
@@ -109,5 +108,33 @@ describe('GetTransactionsByUserIdController', () => {
         const result = await sut.execute(invalidHttpRequest)
         // assert
         expect(result.statusCode).toBe(400)
+    })
+
+    it('should return 404 if user is not found', async () => {
+        // arrange
+        const { sut, getTransactionsByUserIdUseCase } = makeSut()
+        jest.spyOn(
+            getTransactionsByUserIdUseCase,
+            'execute',
+        ).mockRejectedValueOnce(new UserNotFoundError())
+
+        // act
+        const result = await sut.execute(httpRequest)
+
+        // assert
+        expect(result.statusCode).toBe(404)
+    })
+
+    it('should return 500 if GetTransactionsByUserIdUseCase throws an error', async () => {
+        // arrange
+        const { sut, getTransactionsByUserIdUseCase } = makeSut()
+        jest.spyOn(
+            getTransactionsByUserIdUseCase,
+            'execute',
+        ).mockRejectedValueOnce(new Error())
+        // act
+        const result = await sut.execute(httpRequest)
+        // assert
+        expect(result.statusCode).toBe(500)
     })
 })
