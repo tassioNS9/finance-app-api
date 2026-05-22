@@ -63,4 +63,51 @@ describe('GetTransactionsByUserIdController', () => {
         // assert
         expect(result.statusCode).toBe(400)
     })
+
+    it('should return 400 when userId is invalid', async () => {
+        // arrange
+        const { sut } = makeSut()
+        const invalidHttpRequest = {
+            ...httpRequest,
+            params: {
+                userId: 'invalid-user-id',
+            },
+        }
+        // act
+        const result = await sut.execute(invalidHttpRequest)
+        // assert
+        expect(result.statusCode).toBe(400)
+    })
+
+    it('should return 400 when from date is invalid', async () => {
+        // arrange
+        const { sut } = makeSut()
+        const invalidHttpRequest = {
+            ...httpRequest,
+            query: {
+                from: 'invalid-date',
+                to: faker.date.recent().toISOString().split('T')[0],
+            },
+        }
+        // act
+        const result = await sut.execute(invalidHttpRequest)
+        // assert
+        expect(result.statusCode).toBe(400)
+    })
+
+    it('should return 400 when to date is invalid', async () => {
+        // arrange
+        const { sut } = makeSut()
+        const invalidHttpRequest = {
+            ...httpRequest,
+            query: {
+                from: faker.date.past().toISOString().split('T')[0],
+                to: 'invalid-date',
+            },
+        }
+        // act
+        const result = await sut.execute(invalidHttpRequest)
+        // assert
+        expect(result.statusCode).toBe(400)
+    })
 })
