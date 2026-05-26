@@ -20,6 +20,7 @@ import { RefreshTokenController } from '../../controllers/user/refresh-token.js'
 import { RefreshTokenUseCase } from '../../use-cases/user/refresh-token.js'
 import { TokensGeneratorAdapter } from '../../adapters/token-generator.js'
 import { TokenVerifierAdapter } from '../../adapters/token-verifier.js'
+import { PasswordHasherAdapter } from '../../adapters/password-hasher.js'
 
 export const makeGetUserByIdController = () => {
     const getUserByIdRepository = new PostgresGetUserByIdRepository()
@@ -32,9 +33,11 @@ export const makeGetUserByIdController = () => {
 export const makeCreateUserController = () => {
     const getUserByEmailRepository = new PostgresGetUserByEmailRepository()
     const createUserRepository = new PostgresCreateUserRepository()
+    const passwordHasherAdapter = new PasswordHasherAdapter()
     const createUserUseCase = new CreateUserUseCase(
         getUserByEmailRepository,
-        createUserRepository
+        createUserRepository,
+        passwordHasherAdapter,
     )
     const createUserController = new CreateUserController(createUserUseCase)
 
@@ -46,7 +49,7 @@ export const makeUpdateUserController = () => {
     const updateUserRepository = new PostgresUpdateUserRepository()
     const updateUserUseCase = new UpdateUserUseCase(
         getUserByEmailRepository,
-        updateUserRepository
+        updateUserRepository,
     )
     const updateUserController = new UpdateUserController(updateUserUseCase)
 
@@ -66,10 +69,10 @@ export const makeGetUserBalanceController = () => {
     const getUserByIdRepository = new PostgresGetUserByIdRepository()
     const getUserBalanceUseCase = new GetUserBalanceUseCase(
         getUserBalanceRepository,
-        getUserByIdRepository
+        getUserByIdRepository,
     )
     const getUserBalanceController = new GetUserBalanceController(
-        getUserBalanceUseCase
+        getUserBalanceUseCase,
     )
 
     return getUserBalanceController
@@ -88,10 +91,10 @@ export const makeRefreshTokenController = () => {
     const tokenVerifierAdapter = new TokenVerifierAdapter()
     const refreshTokenUseCase = new RefreshTokenUseCase(
         tokensGeneratorAdapter,
-        tokenVerifierAdapter
+        tokenVerifierAdapter,
     )
     const refreshTokenController = new RefreshTokenController(
-        refreshTokenUseCase
+        refreshTokenUseCase,
     )
 
     return refreshTokenController
