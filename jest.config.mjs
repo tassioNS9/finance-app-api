@@ -8,7 +8,8 @@ const config = {
     collectCoverage: true,
     coverageDirectory: 'coverage',
     coverageProvider: 'v8',
-    collectCoverageFrom: ['src/**/*.js'],
+    collectCoverageFrom: ['src/**/*.js', '!src/generated/**'],
+    coveragePathIgnorePatterns: ['/node_modules/', '/src/generated/'],
 }
 
 export default config

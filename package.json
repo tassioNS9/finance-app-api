@@ -6,6 +6,7 @@
     "scripts": {
         "test": "jest --silent",
         "test:watch": "jest --watch --silent",
+        "test:coverage": "jest --coverage --silent",
         "migrations:run": "node src/db/postgres/migrations/exec.js",
         "start:dev": "node --watch index.js",
         "eslint:check": "eslint src --ext .js"
