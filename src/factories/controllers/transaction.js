@@ -12,17 +12,20 @@ import { PostgresUpdateTransactionsRepository } from '../../repositories/postgre
 import { DeleteTransactionController } from '../../controllers/transaction/delete-transaction.js'
 import { DeleteTransactionUseCase } from '../../use-cases/transaction/delete-transaction.js'
 import { PostgresDeleteTransactionRepository } from '../../repositories/postgres/transaction/delete-transaction.js'
+import { IdGeneratorAdapter } from '../../adapters/id-generator.js'
 
 export const makeCreateTransactionController = () => {
     const getUserByIdRepository = new PostgresGetUserByIdRepository()
     const createTransactionRepository =
         new PostgresCreateTransactionRepository()
+    const idGeneratorAdapter = new IdGeneratorAdapter()
     const createTransactionUseCase = new CreateTransactionUseCase(
         createTransactionRepository,
-        getUserByIdRepository
+        getUserByIdRepository,
+        idGeneratorAdapter,
     )
     const createTransactionController = new CreateTransactionController(
-        createTransactionUseCase
+        createTransactionUseCase,
     )
 
     return createTransactionController
@@ -34,7 +37,7 @@ export const makeGetTransactionsByUserIdController = () => {
         new PostgresGetTransactionsByUserId()
     const getTransactionsByUserIdUseCase = new GetTransactionsByUserIdUseCase(
         getTransactionsByUserIdRepository,
-        getUserByIdRepository
+        getUserByIdRepository,
     )
     const getTransactionsByUserIdController =
         new GetTransactionsByUserIdController(getTransactionsByUserIdUseCase)
@@ -49,11 +52,11 @@ export const makeUpdateTransactionController = () => {
 
     const updateTransactionUseCase = new UpdateTransactionUseCase(
         updateTrasactionRepository,
-        getTransactionByIdRepository
+        getTransactionByIdRepository,
     )
 
     const updateTransactionController = new UpdateTransactionController(
-        updateTransactionUseCase
+        updateTransactionUseCase,
     )
 
     return updateTransactionController
@@ -64,10 +67,10 @@ export const makeDeleteTransactionController = () => {
         new PostgresDeleteTransactionRepository()
 
     const deleteTransactionUseCase = new DeleteTransactionUseCase(
-        deleteTransactionRepository
+        deleteTransactionRepository,
     )
     const deleteTransactionController = new DeleteTransactionController(
-        deleteTransactionUseCase
+        deleteTransactionUseCase,
     )
     return deleteTransactionController
 }
