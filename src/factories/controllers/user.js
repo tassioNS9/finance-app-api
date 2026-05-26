@@ -21,7 +21,7 @@ import { RefreshTokenUseCase } from '../../use-cases/user/refresh-token.js'
 import { TokensGeneratorAdapter } from '../../adapters/token-generator.js'
 import { TokenVerifierAdapter } from '../../adapters/token-verifier.js'
 import { PasswordHasherAdapter } from '../../adapters/password-hasher.js'
-
+import { IdGeneratorAdapter } from '../../adapters/id-generator.js'
 export const makeGetUserByIdController = () => {
     const getUserByIdRepository = new PostgresGetUserByIdRepository()
     const getUserByIdUseCase = new GetUserByIdUseCase(getUserByIdRepository)
@@ -34,10 +34,12 @@ export const makeCreateUserController = () => {
     const getUserByEmailRepository = new PostgresGetUserByEmailRepository()
     const createUserRepository = new PostgresCreateUserRepository()
     const passwordHasherAdapter = new PasswordHasherAdapter()
+    const idGeneratorAdapter = new IdGeneratorAdapter()
     const createUserUseCase = new CreateUserUseCase(
         getUserByEmailRepository,
         createUserRepository,
         passwordHasherAdapter,
+        idGeneratorAdapter,
     )
     const createUserController = new CreateUserController(createUserUseCase)
 
