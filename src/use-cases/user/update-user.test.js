@@ -134,7 +134,7 @@ describe('UpdateUserUseCase', () => {
         })
     })
 
-    it('should throw if updateUserRepository throws', async () => {
+    it('should throw if getUserByEmailRepository throws', async () => {
         const { sut, getUserByEmailRepository } = makeSut()
         // Arrange
         jest.spyOn(getUserByEmailRepository, 'execute').mockRejectedValue(
@@ -143,7 +143,25 @@ describe('UpdateUserUseCase', () => {
 
         // Act
         const promise = sut.execute(faker.datatype.uuid(), {
-            email: user.email,
+            email: faker.internet.email(),
+        })
+
+        // Assert
+        await expect(promise).rejects.toThrow()
+    })
+
+    it('should throw if PasswordHasherAdapter throws', async () => {
+        const { sut, passwordHasherAdapter } = makeSut()
+        // Arrange
+        jest.spyOn(passwordHasherAdapter, 'execute').mockRejectedValue(
+            new Error(),
+        )
+
+        // Act
+        const promise = sut.execute(faker.datatype.uuid(), {
+            password: faker.internet.password({
+                length: 10,
+            }),
         })
 
         // Assert
