@@ -167,4 +167,25 @@ describe('UpdateUserUseCase', () => {
         // Assert
         await expect(promise).rejects.toThrow()
     })
+
+    it('should throw if UpdateUserRepository throws', async () => {
+        const { sut, updateUserRepository } = makeSut()
+        // Arrange
+        jest.spyOn(updateUserRepository, 'execute').mockRejectedValue(
+            new Error(),
+        )
+
+        // Act
+        const promise = sut.execute(faker.datatype.uuid(), {
+            first_name: faker.person.firstName(),
+            last_name: faker.person.lastName(),
+            email: faker.internet.email(),
+            password: faker.internet.password({
+                length: 10,
+            }),
+        })
+
+        // Assert
+        await expect(promise).rejects.toThrow()
+    })
 })
