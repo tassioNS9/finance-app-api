@@ -3,19 +3,9 @@ import { UpdateTransactionUseCase } from './update-transactions'
 import { ForbiddenError } from '../../errors/user.js'
 
 describe('Update Transactions Use Case', () => {
-    const user = {
-        id: faker.string.uuid(),
-        first_name: faker.name.firstName(),
-        last_name: faker.name.lastName(),
-        email: faker.internet.email(),
-        password: faker.internet.password({
-            length: 7,
-        }),
-    }
-
     const transaction = {
         id: faker.string.uuid(),
-        user_id: user.id,
+        user_id: faker.string.uuid(),
         amount: faker.number.int({ min: 1, max: 1000 }),
         description: faker.lorem.sentence(),
         date: faker.date.recent().toISOString(),
