@@ -30,7 +30,7 @@ describe('Create User Controller', () => {
         const result = await sut.execute(httpRequest)
         // assert
         expect(result.statusCode).toBe(201)
-        //expect(result.body).toEqual(httpRequest.body)
+        expect(result.body).toEqual(user)
     })
 
     it('should return 400 if first_name is not provided', async () => {

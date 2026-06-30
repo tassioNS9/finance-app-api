@@ -1,6 +1,7 @@
 import { GetUserBalanceController } from './get-user-balance'
 import { faker } from '@faker-js/faker'
 import { UserNotFoundError } from '../../errors/user.js'
+
 describe('getUserBalanceController', () => {
     class GetUserBalanceUseCaseStub {
         async execute() {
