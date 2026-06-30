@@ -9,3 +9,10 @@ export const user = {
         length: 8,
     }),
 }
+
+export const userBalance = {
+    earnings: faker.datatype.number(),
+    expenses: faker.datatype.number(),
+    investments: faker.datatype.number(),
+    balance: faker.datatype.number(),
+}
