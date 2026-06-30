@@ -42,7 +42,7 @@ describe('GetUserByIdUseCase', () => {
         const userId = faker.datatype.uuid()
         getUserByIdRepositorySpy.mockResolvedValue(user)
         // act
-        const result = await sut.execute(userId)
+        await sut.execute(userId)
         // assert
         expect(getUserByIdRepositorySpy).toHaveBeenCalledWith(userId)
     })
