@@ -1,16 +1,8 @@
 import { DeleteUserUseCase } from './delete-user'
 import { faker } from '@faker-js/faker'
+import { user } from '../../tests/fixtures/user.js'
 
 describe('DeleteUserUseCase', () => {
-    const user = {
-        id: faker.datatype.uuid(),
-        first_name: faker.name.fullName(),
-        last_name: faker.name.lastName(),
-        email: faker.internet.email(),
-        password: faker.internet.password({
-            length: 8,
-        }),
-    }
     class DeleteUserRepositoryStub {
         async execute() {
             return user

@@ -1,17 +1,9 @@
 import { EmailAlreadyInUseError } from '../../errors/user'
 import { UpdateUserUseCase } from './update-user'
 import { faker } from '@faker-js/faker'
+import { user } from '../../tests/fixtures/user.js'
 
 describe('UpdateUserUseCase', () => {
-    const user = {
-        id: faker.datatype.uuid(),
-        first_name: faker.name.fullName(),
-        last_name: faker.name.lastName(),
-        email: faker.internet.email(),
-        password: faker.internet.password({
-            length: 8,
-        }),
-    }
     class GetUserByEmailRepositoryStub {
         async execute() {
             return null // Simulate that no user exists with the given email

@@ -1,17 +1,9 @@
 import { faker } from '@faker-js/faker'
 import { UpdateTransactionUseCase } from './update-transactions'
 import { ForbiddenError } from '../../errors/user.js'
+import { transaction } from '../../tests/fixtures/transaction.js'
 
 describe('Update Transactions Use Case', () => {
-    const transaction = {
-        id: faker.string.uuid(),
-        user_id: faker.string.uuid(),
-        name: faker.person.jobDescriptor(),
-        amount: faker.number.int({ min: 1, max: 1000 }),
-        type: faker.helpers.arrayElement(['EXPENSE', 'EARNING', 'INVESTMENT']),
-        date: faker.date.recent().toISOString(),
-    }
-
     class UpdateTransactionsRepositoryStub {
         async execute() {
             return transaction
