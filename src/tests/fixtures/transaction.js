@@ -6,5 +6,5 @@ export const transaction = {
     name: faker.person.jobDescriptor(),
     date: faker.date.recent().toISOString(),
     type: faker.helpers.arrayElement(['EXPENSE', 'EARNING', 'INVESTMENT']),
-    amount: faker.finance.amount(),
+    amount: Number(faker.finance.amount()),
 }
