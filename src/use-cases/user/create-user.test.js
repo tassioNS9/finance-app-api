@@ -1,8 +1,12 @@
 import { EmailAlreadyInUseError } from '../../errors/user'
 import { CreateUserUseCase } from './create-user'
-import { user } from '../../tests/fixtures/user.js'
+import { user as fixtureUser } from '../../tests/fixtures/user.js'
 
 describe('Create User Use Case', () => {
+    const user = {
+        ...fixtureUser,
+        id: undefined,
+    }
     class GetUserByEmailRepositoryStub {
         async execute() {
             return null // Simulate that no user exists with the given email
