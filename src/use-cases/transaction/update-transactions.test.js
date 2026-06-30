@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { UpdateTransactionUseCase } from './update-transactions'
+import { ForbiddenError } from '../../errors/user.js'
 
 describe('Update Transactions Use Case', () => {
     const user = {
@@ -99,5 +100,20 @@ describe('Update Transactions Use Case', () => {
         })
         //assert
         await expect(promise).rejects.toThrow(new Error())
+    })
+
+    it('should throw ForbiddenError if user_id is different from transaction user_id', async () => {
+        // arrange
+        const { sut } = makeSut()
+        const differentUserId = faker.string.uuid()
+
+        // act
+        const promise = sut.execute(transaction.id, {
+            amount: transaction.amount,
+            user_id: differentUserId,
+        })
+
+        // assert
+        await expect(promise).rejects.toThrow(new ForbiddenError())
     })
 })
