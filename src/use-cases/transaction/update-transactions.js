@@ -7,9 +7,8 @@ export class UpdateTransactionUseCase {
     }
 
     async execute(transactionId, params) {
-        const transaction = await this.getTransactionByIdRepository.execute(
-            transactionId
-        )
+        const transaction =
+            await this.getTransactionByIdRepository.execute(transactionId)
 
         if (params.user_id && transaction.user_id !== params.user_id) {
             // Verifica se o ID da transação é refente ao usuário logado
@@ -17,7 +16,7 @@ export class UpdateTransactionUseCase {
         }
         return await this.updateTransactionRepository.execute(
             transactionId,
-            params
+            params,
         )
     }
 }
