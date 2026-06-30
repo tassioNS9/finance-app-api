@@ -6,8 +6,9 @@ describe('Update Transactions Use Case', () => {
     const transaction = {
         id: faker.string.uuid(),
         user_id: faker.string.uuid(),
+        name: faker.person.jobDescriptor(),
         amount: faker.number.int({ min: 1, max: 1000 }),
-        description: faker.lorem.sentence(),
+        type: faker.helpers.arrayElement(['EXPENSE', 'EARNING', 'INVESTMENT']),
         date: faker.date.recent().toISOString(),
     }
 
