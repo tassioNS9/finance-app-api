@@ -11,6 +11,7 @@ const config = {
     collectCoverageFrom: ['src/**/*.js', '!src/generated/**'],
     coveragePathIgnorePatterns: ['/node_modules/', '/src/generated/'],
     globalSetup: '<rootDir>/jest.global-setup.js',
+    setupFilesAfterEnv: ['<rootDir>/jest.setup-after-env.js'],
 }
 
 export default config
