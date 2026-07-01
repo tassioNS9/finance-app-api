@@ -10,6 +10,7 @@ const config = {
     coverageProvider: 'v8',
     collectCoverageFrom: ['src/**/*.js', '!src/generated/**'],
     coveragePathIgnorePatterns: ['/node_modules/', '/src/generated/'],
+    globalSetup: '<rootDir>/jest.global-setup.js',
 }
 
 export default config
