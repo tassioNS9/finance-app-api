@@ -13,6 +13,18 @@ describe('Delete User Repository', () => {
 
         // toScritctEqual é usado para comparar objetos, arrays e outros tipos de dados complexos,
         // garantindo que eles sejam idênticos em estrutura e conteúdo.
-        expect(result).toStrictEqual(true)
+        expect(result).toStrictEqual(user)
+    })
+
+    it('should call Prisma with correct params', async () => {
+        const sut = new PostgresDeleteUserRepository()
+        const prismaSpy = jest.spyOn(prisma.user, 'delete')
+        await sut.execute(user.id)
+
+        expect(prismaSpy).toHaveBeenCalledWith({
+            where: {
+                id: user.id,
+            },
+        })
     })
 })
