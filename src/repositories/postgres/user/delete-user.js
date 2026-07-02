@@ -10,7 +10,6 @@ export class PostgresDeleteUserRepository {
             })
             return deletedUser
         } catch (error) {
-            console.log(error)
             return null
         }
     }
