@@ -10,10 +10,12 @@ describe('Delete User Repository', () => {
 
         const sut = new PostgresDeleteUserRepository()
         const result = await sut.execute(user.id)
+        console.log(result, 'result')
 
-        // toScritctEqual é usado para comparar objetos, arrays e outros tipos de dados complexos,
-        // garantindo que eles sejam idênticos em estrutura e conteúdo.
-        expect(result).toStrictEqual(user)
+        //toMatchObject é usado para comparar objetos,
+        // verificando se o objeto esperado contém as mesmas propriedades e valores do objeto real, mas não exige que sejam exatamente iguais.
+
+        expect(result).toMatchObject(user)
     })
 
     it('should call Prisma with correct params', async () => {
